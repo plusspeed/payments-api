@@ -1,0 +1,203 @@
+swagger: "2.0"
+info:
+  description: "This is a sample Payment server. TODO"
+  version: "1.0.0"
+  title: "Payment Service"
+  contact:
+    email: "pedrosousagrilo@gmail.com"
+host: "test.com"
+basePath: "/v1"
+tags:
+  - name: "Payment"
+    description: "TODO"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /payments:
+    get:
+      tags:
+        - "Payments"
+      summary: "Retrieves all payments"
+      description: ""
+      produces:
+        - "application/json"
+      parameters:
+        - in: "query"
+          name: "limit"
+          required: true
+          description: "limit for the number of rows"
+          type: integer
+        - in: "query"
+          name: "start"
+          required: true
+          description: "offset or start row number"
+          type: integer
+      responses:
+        201:
+          description: "successful operation"
+        404:
+          description: "payment does not exist"
+          schema:
+            $ref: "#/definitions/APIResponse"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/APIResponse"
+  /payment:
+    post:
+      tags:
+        - "Payment"
+      summary: "Adds a new payment transaction to the API"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Transaction object that needs to be saved"
+          required: true
+          schema:
+            $ref: "#/definitions/Transaction"
+      responses:
+        201:
+          description: "successful operation"
+        400:
+          description: "Bad request. When the user does not provide a valid json."
+          schema:
+            $ref: "#/definitions/APIResponse"
+        409:
+          description: "When the resource already exist and is different from the one provided"
+          schema:
+            $ref: "#/definitions/APIResponse"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/APIResponse"
+  /payment/{paymentID}:
+    get:
+      tags:
+        - "Payment"
+      summary: "Returns a payment based on the paymentID in the url"
+      description: "Returns a payment"
+      operationId: "GetPaymentByID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "paymentID"
+          in: "path"
+          description: "ID of payment to return"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/APIResponse"
+        404:
+          description: "payment does not exist"
+          schema:
+            $ref: "#/definitions/APIResponse"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/APIResponse"
+    put:
+      tags:
+        - "Payment"
+      summary: "Updates a pet in the store with form data"
+      description: ""
+      operationId: "updatePetWithForm"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "paymentID"
+          in: "path"
+          description: "ID of payment to return"
+          required: true
+          type: "string"
+        - name: "payment"
+          in: "body"
+          description: "ID of payment to return"
+          schema:
+            $ref: "#/definitions/Transaction"
+
+      responses:
+        204:
+          description: "success operation"
+        400:
+          description: "Bad request. When the user does not provide a valid json."
+          schema:
+            $ref: "#/definitions/APIResponse"
+        404:
+          description: "payment does not exist"
+          schema:
+            $ref: "#/definitions/APIResponse"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/APIResponse"
+    delete:
+      tags:
+        - "Payment"
+      summary: "Deletes a pet"
+      description: ""
+      operationId: "deletePet"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - name: "api_key"
+          in: "header"
+          required: false
+          type: "string"
+        - name: "paymentID"
+          in: "path"
+          description: "ID of payment to return"
+          required: true
+          type: "string"
+      responses:
+        204:
+          description: "success operation"
+        404:
+          description: "payment does not exist"
+          schema:
+            $ref: "#/definitions/APIResponse"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/APIResponse"
+definitions:
+  Transaction:
+    type: "object"
+    properties:
+      ID:
+        type: "string"
+        enum:
+          - "payment"
+      Type:
+        type: "string"
+        format: "int64"
+      Version:
+        type: "integer"
+      OrganisationID:
+        type: "string"
+      Attributes:
+        type: object
+  APIResponse:
+    type: "object"
+    properties:
+      data:
+        type: object
+      error:
+        type: object
+      links:
+        type: object
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
